@@ -14,12 +14,16 @@ const InputForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const response = await axios.get(
-      `https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/search/?query=${location}`,
-    )
-    const locationResults = await response.data
-    setData(locationResults)
-    setShow(true)
+    try {
+      const response = await axios.get(
+        `https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/search/?query=${location}`,
+      )
+      const locationResults = await response.data
+      setData(locationResults)
+      setShow(true)
+    } catch (e) {
+      throw new Error('Kota yang di input tidak tersedia')
+    }
   }
   return (
     <>
