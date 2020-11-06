@@ -6,17 +6,21 @@ import axios from 'axios'
 const Weather = ({ weather }) => {
   const [data, setData] = useState([])
   const [showData, setShowData] = useState(false)
+  const [error, setError] = useState(false)
 
-  const woeid = weather[0].woeid
   const fetchData = async () => {
-    const response = await axios.get(
-      `https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}`,
-    )
-    const results = await response.data
-    setData(results)
-    setShowData(true)
+    try {
+      const response = await axios.get(
+        `https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${weather[0].woeid}`,
+      )
+      const results = await response.data
+      setData(results)
+      setShowData(true)
+    } catch (e) {
+      setError(true)
+      throw new Error(`Error !!!`)
+    }
   }
-
   useEffect(() => {
     fetchData()
     //eslint-disable-next-line
@@ -24,6 +28,7 @@ const Weather = ({ weather }) => {
 
   const forecast = data.consolidated_weather
   console.log(forecast)
+
   if (!showData) {
     return (
       <Box mt={2}>
